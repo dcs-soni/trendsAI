@@ -26,6 +26,10 @@ model AIApp {
   id            String    @id @default(cuid())
   name          String    @unique
   createdAt     DateTime  @default(now())
+  description   String
+  imageUrl      String
+  websiteUrl    String
+  category      String
 
   votes         Vote[]
 }
