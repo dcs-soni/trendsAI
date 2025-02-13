@@ -7,14 +7,14 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section */}
-      <div className="relative">
+      <div className="relative min-h-screen">
         {/* Background gradient blobs */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-green rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
-          <div className="absolute -bottom-20 left-0 w-96 h-96 bg-blue rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+          <div className="absolute top-0 right-0 w-96 h-96 bg-green rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+          <div className="absolute -bottom-20 left-0 w-96 h-96 bg-blue rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 space-y-8 sm:px-6 lg:px-8 pt-32 pb-16 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-7xl font-bold tracking-tight mb-8">
               Discover the Future of{" "}
@@ -45,7 +45,7 @@ export default function LandingPage() {
       </div>
 
       {/* Features Section */}
-      <div className="py-32">
+      <div className="pb-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-24">
             <h2 className="text-6xl font-bold mb-4">
