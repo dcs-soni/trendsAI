@@ -52,7 +52,7 @@ interface DashboardProps {
   aiModels: AIModel[];
 }
 
-// Ts infers id properties as string without "as const"
+// Ts infers id properties as string without "as const" but these strings are literal types
 const tabs = [
   { id: "apps" as const, label: "AI Apps" },
   { id: "models" as const, label: "AI Models" },
