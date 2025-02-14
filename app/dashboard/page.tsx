@@ -52,9 +52,10 @@ interface DashboardProps {
   aiModels: AIModel[];
 }
 
+// Ts infers id properties as string without "as const"
 const tabs = [
-  { id: "apps", label: "AI Apps" },
-  { id: "models", label: "AI Models" },
+  { id: "apps" as const, label: "AI Apps" },
+  { id: "models" as const, label: "AI Models" },
 ];
 
 export default function Dashboard({
