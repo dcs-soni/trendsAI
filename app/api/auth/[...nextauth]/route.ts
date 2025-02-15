@@ -20,6 +20,13 @@ export const authOptions: AuthOptions = {
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
+          select: {
+            id: true,
+            username: true,
+            email: true,
+            password: true,
+            role: true,
+          },
         });
 
         if (!user || !user.password) {
@@ -39,24 +46,32 @@ export const authOptions: AuthOptions = {
           id: user.id,
           name: user.username,
           email: user.email,
+          role: user.role,
         };
       },
     }),
   ],
   callbacks: {
+    async jwt({ token, user, trigger, session }) {
+      if (user) {
+        token.name = user.name;
+        token.role = user.role;
+      } else if (trigger === "update" && session?.name) {
+        token.name = session.name;
+      }
+      return token;
+    },
+
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.name = token.name as string;
+
+        // The email and role have to be added to types file
+        session.user.email = token.email as string;
+        session.user.role = token.role as "ADMIN" | "USER";
       }
       return session;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.name = user.name;
-      }
-      return token;
     },
   },
 

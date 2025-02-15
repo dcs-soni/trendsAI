@@ -2,14 +2,27 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
-import { signIn } from "next-auth/react";
+
+import { useEffect, useRef } from "react";
+import { signIn, useSession } from "next-auth/react";
+
 import InputElement from "@/components/InputElement";
 
 export default function SignIn() {
   const router = useRouter();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated" && session?.user) {
+      const redirecPath =
+        session.user.role === "ADMIN" ? "/admin" : "/dashboard";
+      // Preventing users to go back to previous page using browser
+      router.replace(redirecPath);
+    }
+  }, [session, status, router]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -24,7 +37,12 @@ export default function SignIn() {
     });
 
     if (result?.ok) {
-      router.push("/dashboard");
+      if (session?.user.role === "ADMIN") {
+        router.push("/admin");
+      } else {
+        router.push("/dashboard");
+      }
+
       router.refresh();
     } else {
       alert(result?.error || "Failed to sign in");
