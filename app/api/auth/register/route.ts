@@ -1,8 +1,8 @@
 import { createUser } from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
-export async function POST(req: NextResponse) {
+export async function POST(req: NextRequest) {
   const { username, email, password } = await req.json();
 
   // Input validation
@@ -19,13 +19,18 @@ export async function POST(req: NextResponse) {
     // Create new user
     const user = await createUser(username, email, hashedPassword);
 
-    return NextResponse.json({
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
+    return NextResponse.json(
+      {
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+        },
       },
-    });
+      {
+        status: 201,
+      }
+    );
   } catch (error) {
     console.error("Error creating user", error);
 
