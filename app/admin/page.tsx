@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/auth.config";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import AdminDashboard from "@/app/admin/AdminDashboard";
@@ -19,6 +19,13 @@ export default async function AdminDashboardPage() {
             votes: true,
           },
         },
+        votes: {
+          select: {
+            id: true,
+            userId: true,
+            isLiked: true,
+          },
+        },
       },
     }),
 
@@ -27,6 +34,13 @@ export default async function AdminDashboardPage() {
         _count: {
           select: {
             votes: true,
+          },
+        },
+        votes: {
+          select: {
+            id: true,
+            userId: true,
+            isLiked: true,
           },
         },
       },

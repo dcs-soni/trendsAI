@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Error creating user", error);
 
-    if (error.code === "P2002") {
+    if ((error as { code?: string }).code === "P2002") {
       return NextResponse.json(
         { error: "User already exists" },
         { status: 409 }

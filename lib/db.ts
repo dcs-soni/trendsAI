@@ -1,18 +1,26 @@
 import { prisma } from "@/lib/prisma";
-import { Role } from "@prisma/client";
 
 export async function createUser(
   username: string,
   email: string,
-  password: string,
-  role: Role = "USER"
+  hashedPassword: string
 ) {
-  return prisma.user.create({
-    data: {
-      username,
-      email,
-      password,
-      role,
-    },
-  });
+  try {
+    const user = await prisma.user.create({
+      data: {
+        username,
+        email,
+        password: hashedPassword,
+        role: "USER",
+      },
+    });
+
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
+  } catch (error: any) {
+    if (error?.code === "P2002") {
+      throw new Error("Email already exists");
+    }
+    throw error;
+  }
 }
