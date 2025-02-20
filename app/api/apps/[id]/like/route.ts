@@ -5,12 +5,12 @@ import { authOptions } from "@/app/api/auth/auth.config";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
 
-    const id = params.id;
+    const id = (await params).id;
 
     console.log("POST /api/apps/[id]/like - Started", { id });
     console.log("Session:", {
