@@ -1,6 +1,12 @@
+"use client";
+
 import { AIApp, AIModel } from "@/app/dashboard/page";
 import Image from "next/image";
 import Link from "next/link";
+import LikeSVG from "@/components/icons/LikeSVG";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+import React from "react";
 
 interface CardContentProps {
   aiApps?: AIApp[];
@@ -13,6 +19,86 @@ const CardContent = ({
   aiModels = [],
   typeOfCards,
 }: CardContentProps) => {
+  const { data: session, status } = useSession();
+  const [isLoading, setIsLoading] = useState<{ [key: string]: boolean }>({});
+  const [likedItems, setLikedItems] = useState<{ [key: string]: boolean }>(
+    () => {
+      const contentArray = typeOfCards === "aiApps" ? aiApps : aiModels;
+      const liked: { [key: string]: boolean } = {};
+
+      contentArray.forEach((item) => {
+        liked[item.id] = item.votes.some(
+          (vote) => vote.userId === session?.user?.id && vote.isLiked
+        );
+      });
+
+      return liked;
+    }
+  );
+
+  // Add local state for like counts
+  const [likeCounts, setLikeCounts] = useState<{ [key: string]: number }>(
+    () => {
+      const counts: { [key: string]: number } = {};
+      const contentArray = typeOfCards === "aiApps" ? aiApps : aiModels;
+
+      contentArray.forEach((item) => {
+        counts[item.id] = item.votes.filter((v) => v.isLiked).length;
+      });
+
+      return counts;
+    }
+  );
+
+  const handleLikeToggle = async (itemId: string) => {
+    if (status === "loading") {
+      return;
+    }
+
+    if (!session?.user?.id) {
+      alert("Please sign in to like items");
+      return;
+    }
+
+    try {
+      setIsLoading((prev) => ({ ...prev, [itemId]: true }));
+      const endpoint = typeOfCards === "aiApps" ? "apps" : "models";
+      const isCurrentlyLiked = likedItems[itemId];
+      const method = isCurrentlyLiked ? "DELETE" : "POST";
+
+      const response = await fetch(`/api/${endpoint}/${itemId}/like`, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        // Toggle the like state
+        setLikedItems((prev) => ({
+          ...prev,
+          [itemId]: !isCurrentlyLiked,
+        }));
+
+        setLikeCounts((prev) => ({
+          ...prev,
+          [itemId]: prev[itemId] + (isCurrentlyLiked ? -1 : 1),
+        }));
+      } else if (response.status !== 400) {
+        const errorData = await response.text();
+        throw new Error(errorData || "Failed to update like status");
+      }
+    } catch (error) {
+      console.error("Error toggling like:", error);
+      alert(
+        error instanceof Error ? error.message : "Failed to update like status"
+      );
+    } finally {
+      setIsLoading((prev) => ({ ...prev, [itemId]: false }));
+    }
+  };
+
   const EmptyState = ({ type }: { type: string }) => (
     <div className="col-span-full py-12">
       <div className="text-center bg-white/5 rounded-2xl p-8 backdrop-blur-sm border-white/10 max-w-md mx-auto">
@@ -41,71 +127,58 @@ const CardContent = ({
     return <EmptyState type={emptyStateType} />;
   }
 
-  return contentArray.map((category) => (
-    <div
-      key={category.id}
-      className="bg-white/5 rounded-2xl p-6 backdrop-blur-sm border border-white/10">
-      <div className="relative h-40 mb-4 bg-white/5 rounded-xl overflow-hidden">
-        <Image
-          src={category.imageUrl || "/placeholder.png"}
-          alt={category.name}
-          fill
-          className="object-cover"
-        />
-      </div>
-      <h3 className="text-xl font-semibold mb-2">{category.name}</h3>
-      <p className="text-gray-400 mb-4 line-clamp-2">{category.description}</p>
-      <div className="flex items-center justify-between mb-4">
-        <span className="text-sm text-gray-400">
-          Added {formatDate(category.createdAt)}
-        </span>
-        <span className="px-3 py-1 text-sm bg-white/5 rounded-full">
-          {/* Here second category is the category defined while creating apps and models on dashboard */}
-          {category.category}
-        </span>
-      </div>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1 text-gray-400">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-            <span>{category.votes.filter((v) => v.isLiked).length}</span>
-          </div>
-          <div className="flex items-center gap-1 text-gray-400">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-              />
-            </svg>
-            {/* <span>{category?.comments.length}</span> */}
-          </div>
+  return contentArray.map((item) => {
+    const likeCount = likeCounts[item.id] || 0;
+    const isLiked = likedItems[item.id] || false;
+    // const isItemLoading = isLoading[item.id] || false;
+
+    return (
+      <div
+        key={item.id}
+        className="bg-white/5 rounded-2xl p-6 backdrop-blur-sm border border-white/10">
+        <div className="relative h-40 mb-4 bg-white/5 rounded-xl overflow-hidden">
+          <Image
+            src={item.imageUrl || "/placeholder.png"}
+            alt={item.name}
+            fill
+            className="object-cover"
+          />
         </div>
-        <Link
-          href={category.websiteUrl}
-          target="_blank"
-          className="text-blue-400 hover:text-blue-300 transition-colors">
-          Visit →
-        </Link>
+        <h3 className="text-xl font-semibold mb-2">{item.name}</h3>
+        <p className="text-gray-400 mb-4 line-clamp-2">{item.description}</p>
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-sm text-gray-400">
+            Added {formatDate(item.createdAt)}
+          </span>
+          <span className="px-3 py-1 text-sm bg-white/5 rounded-full">
+            {item.category}
+          </span>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => handleLikeToggle(item.id)}
+              disabled={isLoading[item.id] || status === "loading"}
+              className={`flex items-center gap-1 ${
+                isLiked ? "text-red-500 fill-red-600" : "text-gray-400"
+              } 
+                hover:scale-110 transition-transform 
+                
+                `}>
+              <LikeSVG isLiked={isLiked} />
+              <span>{likeCount}</span>
+            </button>
+          </div>
+          <Link
+            href={item.websiteUrl}
+            target="_blank"
+            className="text-blue/60 hover:text-blue/80 transition-colors">
+            Visit →
+          </Link>
+        </div>
       </div>
-    </div>
-  ));
+    );
+  });
 };
 
 export default function AICards({
@@ -113,9 +186,9 @@ export default function AICards({
   aiApps,
   aiModels,
 }: {
-  aiApps?: AIApp[];
-  aiModels?: AIModel[];
   activeTab: "apps" | "models";
+  aiApps: AIApp[];
+  aiModels: AIModel[];
 }) {
   return (
     <>
