@@ -5,12 +5,13 @@ import { authOptions } from "@/app/api/auth/auth.config";
 
 export async function POST(
   request: Request,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     console.log("POST /api/models/[id]/like - Started");
     const session = await getServerSession(authOptions);
-    const { id } = context.params;
+
+    const id = params.id;
 
     console.log("Session:", {
       exists: !!session,
