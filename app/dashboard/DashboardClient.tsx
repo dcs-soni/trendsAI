@@ -54,7 +54,7 @@ export default function DashboardClient({
           <div>
             {session && (
               <button
-                onClick={() => signOut()}
+                onClick={() => signOut({ callbackUrl: "/signin" })}
                 className="ml-4 px-4 py-2 text-sm bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors">
                 Sign Out
               </button>
