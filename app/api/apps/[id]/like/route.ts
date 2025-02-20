@@ -5,6 +5,7 @@ import { authOptions } from "@/app/api/auth/auth.config";
 
 export async function POST(
   request: NextRequest,
+  response: NextResponse,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -57,12 +58,12 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  response: NextResponse,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { params } = context;
     const session = await getServerSession(authOptions);
-    const id = params.id;
+    const id = (await params).id;
 
     console.log("DELETE /api/apps/[id]/like - Started", { id });
     console.log("Session:", {

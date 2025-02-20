@@ -1,10 +1,11 @@
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authOptions } from "@/app/api/auth/auth.config";
 
 export async function POST(
-  request: Request,
+  request: NextRequest,
+  response: NextResponse,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -56,13 +57,13 @@ export async function POST(
 }
 
 export async function DELETE(
-  request: Request,
-  context: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     console.log("DELETE /api/models/[id]/like - Started");
     const session = await getServerSession(authOptions);
-    const { id } = context.params;
+    const id = (await params).id;
 
     console.log("Session:", {
       exists: !!session,
