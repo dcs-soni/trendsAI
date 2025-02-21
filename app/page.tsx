@@ -2,6 +2,7 @@ import { ButtonLinks } from "@/components/ButtonLinks";
 import FeatureOneSVG from "@/components/icons/FeatureOneSVG";
 import FeatureTwoSVG from "@/components/icons/FeatureTwoSVG";
 import FeatureThreeSVG from "@/components/icons/FeatureThreeSVG";
+import * as motion from "motion/react-client";
 
 export default function LandingPage() {
   return (
@@ -15,12 +16,29 @@ export default function LandingPage() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 space-y-8 sm:px-6 lg:px-8 pt-32 pb-16 relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-3xl mx-auto text-center">
             <h1 className="text-7xl font-bold tracking-tight mb-8">
               Discover the Future of{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-green/50 to-blue/50">
+              <motion.span
+                animate={{
+                  textShadow: [
+                    "0px 0px 5px rgba(57, 255, 20, 1)",
+                    "0px 0px 15px rgba(7, 145, 145, 1)",
+                    "0px 0px 5px rgba(57, 255, 20, 1)",
+                  ],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="bg-clip-text text-transparent bg-gradient-to-r from-green/50 to-blue/50">
                 AI
-              </span>
+              </motion.span>
             </h1>
             <p className="text-xl text-gray-400 mb-12 leading-relaxed">
               Your gateway to exploring and discovering the most innovative AI
@@ -40,25 +58,33 @@ export default function LandingPage() {
                 Explore Apps
               </ButtonLinks>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {/* Features Section */}
       <div className="pb-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-24">
+          <motion.div
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-24">
             <h2 className="text-6xl font-bold mb-4">
               Where AI discovery and
               <br />
               innovation become one
             </h2>
-          </div>
+          </motion.div>
 
           {/* Feature Items */}
           <div className="space-y-32">
             {/* Feature 1 */}
-            <div className="flex flex-col md:flex-row items-center gap-12">
+            <motion.div
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="flex flex-col md:flex-row items-center gap-12">
               <div className="flex-1">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-r from-green/15 to-blue/10 mb-6">
                   <FeatureOneSVG />
@@ -73,10 +99,14 @@ export default function LandingPage() {
               <div className="flex-1 relative h-96 w-full bg-gradient-to-br from-green/20 to-blue/10 rounded-2xl overflow-hidden">
                 {/* App showcase/demo content here */}
               </div>
-            </div>
+            </motion.div>
 
             {/* Feature 2 */}
-            <div className="flex flex-col md:flex-row-reverse items-center gap-12">
+            <motion.div
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="flex flex-col md:flex-row-reverse items-center gap-12">
               <div className="flex-1">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-r from-green/15 to-blue/10 bg-purple-500/10 mb-6">
                   <FeatureTwoSVG />
@@ -91,10 +121,14 @@ export default function LandingPage() {
               <div className="flex-1 relative h-96 w-full bg-gradient-to-br from-blue/30 to-green/10 rounded-2xl overflow-hidden">
                 {/* Model showcase/demo content here */}
               </div>
-            </div>
+            </motion.div>
 
             {/* Feature 3 */}
-            <div className="flex flex-col md:flex-row items-center gap-12">
+            <motion.div
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="flex flex-col md:flex-row items-center gap-12">
               <div className="flex-1">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-r from-green/15 to-blue/10 bg-purple-500/10 mb-6">
                   <FeatureThreeSVG />
@@ -108,7 +142,7 @@ export default function LandingPage() {
               <div className="flex-1 relative h-96 w-full bg-gradient-to-br from-green/20 to-blue/30 rounded-2xl overflow-hidden">
                 {/* Community showcase/demo content here */}
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -119,7 +153,11 @@ export default function LandingPage() {
           <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-blue/10 to-transparent"></div>
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center relative z-10">
             <h2 className="text-5xl font-bold mb-8">
               Ready to explore the world of AI?
             </h2>
@@ -129,7 +167,7 @@ export default function LandingPage() {
               className="inline-block px-8 py-4 text-lg font-medium bg-white text-black rounded-full hover:bg-gray-100 transition-colors duration-200">
               Get Started now
             </ButtonLinks>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
