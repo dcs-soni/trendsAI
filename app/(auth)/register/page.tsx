@@ -4,6 +4,7 @@ import InputElement from "@/components/InputElement";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
+import { motion } from "framer-motion";
 
 export default function Register() {
   const router = useRouter();
@@ -37,7 +38,10 @@ export default function Register() {
   };
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}>
       <div>
         <h2 className="text-4xl font-bold text-center mb-2">
           Create your account
@@ -91,6 +95,6 @@ export default function Register() {
           </Link>
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 }
