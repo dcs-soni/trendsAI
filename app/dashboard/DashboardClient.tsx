@@ -5,6 +5,7 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { AIApp, AIModel } from "./page";
+import { motion } from "framer-motion";
 
 // Ts infers id properties as string without "as const" but these strings are literal types
 const tabs = [
@@ -68,13 +69,20 @@ export default function DashboardClient({
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 py-2 px-4 text-sm font-medium rounded-lg transition-colors
+              className={` relative flex-1 py-2 px-4 text-sm font-medium rounded-lg transition-colors
               ${
                 activeTab === tab.id
                   ? "text-white"
                   : "text-gray-400 hover:text-gray-200"
               }`}>
-              <span className="relative">{tab.label}</span>
+              {activeTab === tab.id && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 bg-white/10 rounded-lg"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10">{tab.label}</span>
             </button>
           ))}
         </div>

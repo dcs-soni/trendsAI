@@ -7,6 +7,7 @@ import LikeSVG from "@/components/icons/LikeSVG";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import React from "react";
+import { motion } from "framer-motion";
 
 interface CardContentProps {
   aiApps?: AIApp[];
@@ -100,14 +101,17 @@ const CardContent = ({
   };
 
   const EmptyState = ({ type }: { type: string }) => (
-    <div className="col-span-full py-12">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="col-span-full py-12">
       <div className="text-center bg-white/5 rounded-2xl p-8 backdrop-blur-sm border-white/10 max-w-md mx-auto">
         <h3 className="text-xl font-semibold mb-2">No {type} Found</h3>
         <p className="text-gray-400">
           There are no AI {type} available at the moment.
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 
   const formatDate = (date: Date) => {
@@ -133,8 +137,10 @@ const CardContent = ({
     // const isItemLoading = isLoading[item.id] || false;
 
     return (
-      <div
+      <motion.div
         key={item.id}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         className="bg-white/5 rounded-2xl p-6 backdrop-blur-sm border border-white/10">
         <div className="relative h-40 mb-4 bg-white/5 rounded-xl overflow-hidden">
           <Image
@@ -176,7 +182,7 @@ const CardContent = ({
             Visit →
           </Link>
         </div>
-      </div>
+      </motion.div>
     );
   });
 };
