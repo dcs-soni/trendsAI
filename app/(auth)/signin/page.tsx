@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import { signIn, useSession } from "next-auth/react";
 
 import InputElement from "@/components/InputElement";
+import { motion } from "framer-motion";
 
 export default function SignIn() {
   const router = useRouter();
@@ -50,7 +51,10 @@ export default function SignIn() {
   };
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}>
       <div>
         <h2 className="text-4xl font-bold text-center mb-2">Welcome back</h2>
         <p className="text-center text-gray-400 text-lg">
@@ -99,7 +103,11 @@ export default function SignIn() {
       </div>
 
       {/* Social Sign-in Options */}
-      <div className="mt-6">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+        className="mt-6">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-white/10"></div>
@@ -134,7 +142,7 @@ export default function SignIn() {
             </svg>
           </button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
