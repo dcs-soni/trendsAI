@@ -17,7 +17,7 @@ const tabs = [
 interface DashboardClientProps {
   aiApps: AIApp[];
   aiModels: AIModel[];
-  session: Session;
+  session: Session | null;
 }
 
 export default function DashboardClient({
@@ -26,13 +26,6 @@ export default function DashboardClient({
   session,
 }: DashboardClientProps) {
   const [activeTab, setActiveTab] = useState<"apps" | "models">("apps");
-
-  // console.log("session user data:", {
-  //   id: session.user.id,
-  //   name: session.user.name,
-  //   email: session.user.email,
-  //   role: session.user.role,
-  // });
 
   return (
     <div className="min-h-screen bg-black text-white">
