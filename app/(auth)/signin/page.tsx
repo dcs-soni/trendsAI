@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { signIn, useSession } from "next-auth/react";
 
 import InputElement from "@/components/InputElement";
 import { motion } from "framer-motion";
 
-export default function SignIn() {
+function SignInFunction() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
@@ -163,5 +163,14 @@ export default function SignIn() {
         </p>
       </div>
     </motion.div>
+  );
+}
+
+// https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+export default function SignIn() {
+  return (
+    <Suspense>
+      <SignInFunction />
+    </Suspense>
   );
 }
