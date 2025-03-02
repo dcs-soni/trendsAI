@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import DashboardClient from "./DashboardClient";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/auth.config";
 
 export interface AIApp {
   id: string;
@@ -81,6 +83,14 @@ async function getData() {
 }
 
 export default async function DashboardPage() {
+  const session = await getServerSession(authOptions);
+
+  // if (!session) {
+  //   redirect("/signin");
+  // }
+
   const { aiApps, aiModels } = await getData();
-  return <DashboardClient aiApps={aiApps} aiModels={aiModels} />;
+  return (
+    <DashboardClient aiApps={aiApps} aiModels={aiModels} session={session} />
+  );
 }

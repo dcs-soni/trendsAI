@@ -1,7 +1,8 @@
 "use client";
 
 import AICards from "@/components/AICards";
-import { signOut, useSession } from "next-auth/react";
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { AIApp, AIModel } from "./page";
@@ -16,14 +17,22 @@ const tabs = [
 interface DashboardClientProps {
   aiApps: AIApp[];
   aiModels: AIModel[];
+  session: Session;
 }
 
 export default function DashboardClient({
   aiApps,
   aiModels,
+  session,
 }: DashboardClientProps) {
-  const { data: session } = useSession();
   const [activeTab, setActiveTab] = useState<"apps" | "models">("apps");
+
+  // console.log("session user data:", {
+  //   id: session.user.id,
+  //   name: session.user.name,
+  //   email: session.user.email,
+  //   role: session.user.role,
+  // });
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -37,30 +46,34 @@ export default function DashboardClient({
               <div>
                 <p>
                   Welcome back,{" "}
-                  <span className="text-blue/40">{session.user?.name}</span>
+                  <span className="text-blue/40">{session?.user.name}</span>
                 </p>
               </div>
             ) : (
-              <p className="text-gray-400 mt-1">
-                <Link
-                  href="/signin"
-                  className="text-blue/50 hover:text-blue/80">
-                  Sign In{" "}
-                </Link>
-                to vote and comment for your favourite apps and models
-              </p>
+              <div>
+                <p>
+                  <Link className="text-blue/40" href="/signin">
+                    Sign in{" "}
+                  </Link>
+
+                  <span>
+                    {" "}
+                    to vote and comment for your favourite apps and models
+                  </span>
+                </p>
+              </div>
             )}
           </div>
 
-          <div>
-            {session && (
+          {session && (
+            <div>
               <button
                 onClick={() => signOut({ callbackUrl: "/signin" })}
                 className="ml-4 px-4 py-2 text-sm bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors">
                 Sign Out
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Tabs */}
@@ -69,7 +82,7 @@ export default function DashboardClient({
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={` relative flex-1 py-2 px-4 text-sm font-medium rounded-lg transition-colors
+              className={`relative flex-1 py-2 px-4 text-sm font-medium rounded-lg transition-colors
               ${
                 activeTab === tab.id
                   ? "text-white"
@@ -89,7 +102,12 @@ export default function DashboardClient({
 
         {/* Content */}
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <AICards activeTab={activeTab} aiApps={aiApps} aiModels={aiModels} />
+          <AICards
+            activeTab={activeTab}
+            aiApps={aiApps}
+            aiModels={aiModels}
+            session={session}
+          />
         </div>
       </div>
     </div>

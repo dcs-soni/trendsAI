@@ -1,12 +1,29 @@
 import { prisma } from "@/lib/prisma";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import GithubProvider from "next-auth/providers/github";
 import bcrypt from "bcrypt";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          prompt: "select_account",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
+    }),
+    GithubProvider({
+      clientId: process.env.GITHUB_ID!,
+      clientSecret: process.env.GITHUB_SECRET!,
+    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -52,34 +69,85 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
+    async signIn({ user, account, profile }) {
+      if (account?.provider === "google" || account?.provider === "github") {
+        try {
+          // Check if user exists
+          const existingUser = await prisma.user.findUnique({
+            where: { email: user.email! },
+          });
+
+          if (!existingUser) {
+            // Create new user if they don't exist
+            await prisma.user.create({
+              data: {
+                email: user.email!,
+                username: user.name || user.email!.split("@")[0],
+                role: "USER",
+              },
+            });
+          }
+
+          return true;
+        } catch (error) {
+          console.error("Error in signIn callback:", error);
+          return false;
+        }
+      }
+      return true;
+    },
+
+    async jwt({ token, user, account, profile }) {
+      if (account?.provider === "google" || account?.provider === "github") {
+        // Fetch user from database to get role and other custom fields
+        const dbUser = await prisma.user.findUnique({
+          where: { email: token.email! },
+          select: { id: true, username: true, role: true, email: true },
+        });
+
+        if (dbUser) {
+          token.id = dbUser.id;
+          token.name = dbUser.username;
+          token.role = dbUser.role;
+          token.email = dbUser.email;
+        }
+      } else if (user) {
         token.id = user.id;
-        token.email = user.email;
         token.name = user.name;
+        token.email = user.email;
         token.role = user.role;
       }
+
       return token;
     },
 
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id;
+        session.user.id = token.id as string;
         session.user.name = token.name as string;
         session.user.email = token.email as string;
         session.user.role = token.role as "USER" | "ADMIN";
       }
-      console.log("Session in callback:", session);
       return session;
+    },
+
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`;
+      } else if (new URL(url).origin === baseUrl) {
+        return url;
+      }
+      return baseUrl;
     },
   },
   pages: {
     signIn: "/signin",
     error: "/auth/error",
   },
+  debug: process.env.NODE_ENV === "development",
   session: {
     strategy: "jwt",
-    maxAge: 1 * 60, // 1 min
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
