@@ -99,11 +99,7 @@ export default function ManageCategory({
 
       {/* Add Apps/Models modal  */}
       {showAddModal && (
-        <AddModal
-          category={category}
-          aiCategory={aiCategory}
-          setShowAddModal={setShowAddModal}
-        />
+        <AddModal category={category} setShowAddModal={setShowAddModal} />
       )}
     </div>
   );
