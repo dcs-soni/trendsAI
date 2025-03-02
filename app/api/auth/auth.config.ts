@@ -75,17 +75,47 @@ export const authOptions: NextAuthOptions = {
           // Check if user exists
           const existingUser = await prisma.user.findUnique({
             where: { email: user.email! },
+            include: { accounts: true }, // Check linked accounts
           });
 
           if (!existingUser) {
-            // Create new user if they don't exist
+            // Create new user if they don't exist and link OAuth account ottherwise OAuthAccountNotLinked error
             await prisma.user.create({
               data: {
                 email: user.email!,
                 username: user.name || user.email!.split("@")[0],
                 role: "USER",
+                accounts: {
+                  create: {
+                    provider: account.provider,
+                    providerAccountId: account.providerAccountId,
+                    type: account.type,
+                    access_token: account.access_token,
+                    refresh_token: account.refresh_token,
+                    expires_at: account.expires_at,
+                  },
+                },
               },
             });
+          } else {
+            // If user exists but no linked account, link it
+            const accountExists = existingUser.accounts.some(
+              (acc) => acc.provider === account.provider
+            );
+
+            if (!accountExists) {
+              await prisma.account.create({
+                data: {
+                  userId: existingUser.id,
+                  provider: account.provider,
+                  providerAccountId: account.providerAccountId,
+                  type: account.type,
+                  access_token: account.access_token,
+                  refresh_token: account.refresh_token,
+                  expires_at: account.expires_at,
+                },
+              });
+            }
           }
 
           return true;
