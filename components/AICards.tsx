@@ -1,6 +1,7 @@
 "use client";
 
 import { AIApp, AIModel } from "@/app/dashboard/page";
+import { Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import LikeSVG from "@/components/icons/LikeSVG";
@@ -13,14 +14,16 @@ interface CardContentProps {
   aiApps?: AIApp[];
   aiModels?: AIModel[];
   typeOfCards: "aiApps" | "aiModels";
+  session: Session;
 }
 
 const CardContent = ({
   aiApps = [],
   aiModels = [],
   typeOfCards,
+  session,
 }: CardContentProps) => {
-  const { data: session, status } = useSession();
+  const { data: sessionData, status } = useSession();
   const [isLoading, setIsLoading] = useState<{ [key: string]: boolean }>({});
   const [likedItems, setLikedItems] = useState<{ [key: string]: boolean }>(
     () => {
@@ -29,7 +32,7 @@ const CardContent = ({
 
       contentArray.forEach((item) => {
         liked[item.id] = item.votes.some(
-          (vote) => vote.userId === session?.user?.id && vote.isLiked
+          (vote) => vote.userId === sessionData?.user?.id && vote.isLiked
         );
       });
 
@@ -56,7 +59,7 @@ const CardContent = ({
       return;
     }
 
-    if (!session?.user?.id) {
+    if (!sessionData?.user?.id) {
       alert("Please sign in to like items");
       return;
     }
@@ -191,17 +194,23 @@ export default function AICards({
   activeTab,
   aiApps,
   aiModels,
+  session,
 }: {
   activeTab: "apps" | "models";
   aiApps: AIApp[];
   aiModels: AIModel[];
+  session: Session;
 }) {
   return (
     <>
       {activeTab === "apps" ? (
-        <CardContent typeOfCards="aiApps" aiApps={aiApps} />
+        <CardContent typeOfCards="aiApps" aiApps={aiApps} session={session} />
       ) : (
-        <CardContent typeOfCards="aiModels" aiModels={aiModels} />
+        <CardContent
+          typeOfCards="aiModels"
+          aiModels={aiModels}
+          session={session}
+        />
       )}
     </>
   );
