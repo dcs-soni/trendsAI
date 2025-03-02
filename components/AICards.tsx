@@ -144,27 +144,38 @@ const CardContent = ({
         key={item.id}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white/5 rounded-2xl p-6 backdrop-blur-sm border border-white/10">
-        <div className="relative h-40 mb-4 bg-white/5 rounded-xl overflow-hidden">
-          <Image
-            src={item.imageUrl || "/placeholder.png"}
-            alt={item.name}
-            fill
-            className="object-cover"
-          />
+        className="bg-white/5 grid rounded-2xl p-4 md:p-6 backdrop-blur-sm border border-white/10">
+        <div className="flex items-start gap-4">
+          <div className="relative h-10 w-10 md:h-18 md:w-18 mb-4 bg-white/5 rounded-xl overflow-hidden">
+            <Image
+              src={item.imageUrl || "/placeholder.png"}
+              alt={item.name}
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div>
+            <h3 className="text-s md:text-2xl font-semibold  md:mb-2">
+              {item.name}
+            </h3>
+            <span className=" block md:hidden px-2 md:px-3 py-1 text-[10px] w-max  md:text-sm bg-white/5 rounded-md">
+              {item.category}
+            </span>
+          </div>
         </div>
-        <h3 className="text-xl font-semibold mb-2">{item.name}</h3>
-        <p className="text-gray-400 mb-4 line-clamp-2">{item.description}</p>
-        <div className="flex items-center justify-between mb-4">
-          <span className="text-sm text-gray-400">
+        <p className="text-gray-400 text-xs md:text-base my-2 md:mb-4 line-clamp-2">
+          {item.description}
+        </p>
+        <div className="md:flex md:items-center md:justify-between md:mb-4">
+          <span className="text-[10px] block md:inline md:text-md mb-4 md:mb-0 text-gray-400">
             Added {formatDate(item.createdAt)}
           </span>
-          <span className="px-3 py-1 text-sm bg-white/5 rounded-full">
+          <span className="hidden md:block mt-4 md:mt-0 px-2 md:px-3 py-2 text-xs  bg-white/5 rounded-md">
             {item.category}
           </span>
         </div>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 ">
             <button
               onClick={() => handleLikeToggle(item.id)}
               disabled={isLoading[item.id] || status === "loading"}
