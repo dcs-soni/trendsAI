@@ -34,13 +34,18 @@ export default function AddModal({ category, setShowAddModal }: AddModalProps) {
     setIsLoading(true);
 
     try {
+      const finalFormData = {
+        ...formData,
+        imageUrl: formData.imageUrl || AIImage, // Use AIImage if imageUrl is empty
+      };
+
       const endpoint = category === "App" ? "/api/apps/add" : "/api/models/add";
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(finalFormData),
       });
 
       if (!response.ok) {
