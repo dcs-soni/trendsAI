@@ -1,12 +1,31 @@
+"use client";
+
 import { ButtonLinks } from "@/components/ButtonLinks";
 import FeatureOneSVG from "@/components/icons/FeatureOneSVG";
 import FeatureTwoSVG from "@/components/icons/FeatureTwoSVG";
 import FeatureThreeSVG from "@/components/icons/FeatureThreeSVG";
-import * as motion from "motion/react-client";
+import { motion } from "motion/react";
+import ImageCarousel from "@/components/ImageCarousel";
+import Link from "next/link";
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-black text-white">
+      {/* Brand Name Section */}
+      <div className="relative z-20 py-6 px-10 flex justify-between items-center">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-2xl font-bold mb-2 bg-gradient-to-r from-blue/60  to-green/60 text-transparent bg-clip-text ">
+          <Link href="/">trendsAI</Link>
+        </motion.h1>
+
+        <div className="space-x-4 text-zinc-300">
+          <Link href="/dashboard">Explore</Link>
+          <Link href="">About</Link>
+        </div>
+      </div>
       {/* Hero Section */}
       <div className="relative min-h-screen">
         {/* Background gradient blobs */}
@@ -15,7 +34,7 @@ export default function LandingPage() {
           <div className="absolute -bottom-20 left-0 w-96 h-96 bg-blue rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 space-y-8 sm:px-6 lg:px-8 pt-32 pb-16 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 space-y-8 sm:px-6 lg:px-8 pt-16 pb-16 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -45,7 +64,7 @@ export default function LandingPage() {
               applications and models. Join our community to stay ahead in the
               AI revolution.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row mb-10 gap-4 justify-center items-center">
               <ButtonLinks
                 href="/register"
                 className="bg-white text-black rounded-full hover:bg-gray-100 transition-colors duration-200">
@@ -58,6 +77,8 @@ export default function LandingPage() {
                 Explore Apps
               </ButtonLinks>
             </div>
+
+            <ImageCarousel />
           </motion.div>
         </div>
       </div>
