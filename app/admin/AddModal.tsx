@@ -3,7 +3,7 @@
 import InputElement from "@/components/InputElement";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { AIImage } from "../constants/constants";
+import { AIImage } from "@/app/constants/constants";
 
 interface AddModalProps {
   category: "App" | "Model";
@@ -97,7 +97,7 @@ export default function AddModal({ category, setShowAddModal }: AddModalProps) {
             htmlFor="imageUrl"
             type="url"
             name="imageUrl"
-            value={formData.imageUrl ?? AIImage}
+            value={formData.imageUrl || AIImage}
             onChange={handleChange}
             placeholder="Image URL">
             Image URL
