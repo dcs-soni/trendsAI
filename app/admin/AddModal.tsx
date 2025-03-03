@@ -99,8 +99,7 @@ export default function AddModal({ category, setShowAddModal }: AddModalProps) {
             name="imageUrl"
             value={formData.imageUrl ?? AIImage}
             onChange={handleChange}
-            placeholder="Image URL"
-            required>
+            placeholder="Image URL">
             Image URL
           </InputElement>
 
