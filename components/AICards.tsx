@@ -14,14 +14,12 @@ interface CardContentProps {
   aiApps?: AIApp[];
   aiModels?: AIModel[];
   typeOfCards: "aiApps" | "aiModels";
-  session: Session;
 }
 
 const CardContent = ({
   aiApps = [],
   aiModels = [],
   typeOfCards,
-  session,
 }: CardContentProps) => {
   const { data: sessionData, status } = useSession();
   const [isLoading, setIsLoading] = useState<{ [key: string]: boolean }>({});
@@ -155,7 +153,7 @@ const CardContent = ({
             />
           </div>
           <div>
-            <h3 className="text-s md:text-2xl font-semibold  md:mb-2">
+            <h3 className="text-s md:text-2sxl font-semibold  md:mb-2">
               {item.name}
             </h3>
             <span className=" block md:hidden px-2 md:px-3 py-1 text-[10px] w-max  md:text-sm bg-white/5 rounded-md">
@@ -205,23 +203,17 @@ export default function AICards({
   activeTab,
   aiApps,
   aiModels,
-  session,
 }: {
   activeTab: "apps" | "models";
   aiApps: AIApp[];
   aiModels: AIModel[];
-  session: Session;
 }) {
   return (
     <>
       {activeTab === "apps" ? (
-        <CardContent typeOfCards="aiApps" aiApps={aiApps} session={session} />
+        <CardContent typeOfCards="aiApps" aiApps={aiApps} />
       ) : (
-        <CardContent
-          typeOfCards="aiModels"
-          aiModels={aiModels}
-          session={session}
-        />
+        <CardContent typeOfCards="aiModels" aiModels={aiModels} />
       )}
     </>
   );

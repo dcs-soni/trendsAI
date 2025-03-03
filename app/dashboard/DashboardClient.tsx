@@ -95,16 +95,38 @@ export default function DashboardClient({
 
         {/* Content */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {session && (
+          {session ? (
             <AICards
               activeTab={activeTab}
               aiApps={aiApps}
               aiModels={aiModels}
-              session={session}
             />
+          ) : (
+            <>
+              <AICards
+                activeTab={activeTab}
+                aiApps={aiApps.sort(() => Math.random() - 0.9).slice(0, 5)}
+                aiModels={aiModels
+                  .sort(() => Math.random() - 0.8)
+                  .slice(0, 5)}></AICards>
+              <div className="flex flex-col md:col-span-3 items-center justify-center gap-3 p-4 rounded-lg">
+                <Link
+                  href="/signin"
+                  className="px-6 py-3 bg-gradient-to-br from-blue/60 to-green/60 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">
+                  Sign in
+                </Link>
+                <p className="text-gray-600 text-sm text-center">
+                  To view and interact with all the AI Apps and Models.
+                </p>
+              </div>
+            </>
           )}
         </div>
       </div>
     </div>
   );
+}
+
+{
+  /* <div className="md:flex md:flex-col md:col-span-3 flex flex-col items-center justify-center gap-3 p-4 rounded-lg"> */
 }
