@@ -5,7 +5,6 @@ import { authOptions } from "@/app/api/auth/auth.config";
 
 export async function POST(
   request: NextRequest,
-  response: NextResponse,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -13,6 +12,13 @@ export async function POST(
     const session = await getServerSession(authOptions);
 
     const id = (await params).id;
+
+    if (!params || !id) {
+      return NextResponse.json(
+        { error: "Missing or invalid ID" },
+        { status: 400 }
+      );
+    }
 
     console.log("Session:", {
       exists: !!session,
@@ -64,6 +70,13 @@ export async function DELETE(
     console.log("DELETE /api/models/[id]/like - Started");
     const session = await getServerSession(authOptions);
     const id = (await params).id;
+
+    if (!params || !id) {
+      return NextResponse.json(
+        { error: "Missing or invalid ID" },
+        { status: 400 }
+      );
+    }
 
     console.log("Session:", {
       exists: !!session,

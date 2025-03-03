@@ -5,13 +5,19 @@ import { authOptions } from "@/app/api/auth/auth.config";
 
 export async function POST(
   request: NextRequest,
-  response: NextResponse,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
 
     const id = (await params).id;
+
+    if (!params || !id) {
+      return NextResponse.json(
+        { error: "Missing or invalid ID" },
+        { status: 400 }
+      );
+    }
 
     console.log("POST /api/apps/[id]/like - Started", { id });
     console.log("Session:", {
@@ -58,12 +64,18 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  response: NextResponse,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
     const id = (await params).id;
+
+    if (!params || !id) {
+      return NextResponse.json(
+        { error: "Missing or invalid ID" },
+        { status: 400 }
+      );
+    }
 
     console.log("DELETE /api/apps/[id]/like - Started", { id });
     console.log("Session:", {
