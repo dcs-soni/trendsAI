@@ -23,7 +23,8 @@ export default function LandingPage() {
 
         <div className="space-x-4 text-zinc-300">
           <Link href="/dashboard">Explore</Link>
-          <Link href="">About</Link>
+          <Link href="/about">About</Link>
+          <Link href="/submit">Submit</Link>
         </div>
       </div>
       {/* Hero Section */}
