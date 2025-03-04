@@ -31,7 +31,7 @@ export default function DashboardClient({
     <div className="min-h-screen bg-black text-white">
       {/* // Main Container // */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-8 flex justify-between ">
+        <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold">Explore</h1>
 
@@ -48,7 +48,6 @@ export default function DashboardClient({
                   <Link className="text-blue/40" href="/signin">
                     Sign in{" "}
                   </Link>
-
                   <span>
                     {" "}
                     to vote and comment for your favourite apps and models
@@ -58,15 +57,22 @@ export default function DashboardClient({
             )}
           </div>
 
-          {session && (
-            <div>
-              <button
-                onClick={() => signOut({ callbackUrl: "/signin" })}
-                className="ml-4 px-4 py-2 text-sm bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors">
-                Sign Out
-              </button>
-            </div>
-          )}
+          <div className="flex items-center gap-4">
+            {session && (
+              <>
+                <Link
+                  href="/submit"
+                  className="px-4 py-2 text-sm bg-gradient-to-r from-blue/60 to-green/60 text-white rounded-lg hover:opacity-90 transition-opacity">
+                  Submit AI Tool
+                </Link>
+                <button
+                  onClick={() => signOut({ callbackUrl: "/signin" })}
+                  className="px-4 py-2 text-sm bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors">
+                  Sign Out
+                </button>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Tabs */}
@@ -125,8 +131,4 @@ export default function DashboardClient({
       </div>
     </div>
   );
-}
-
-{
-  /* <div className="md:flex md:flex-col md:col-span-3 flex flex-col items-center justify-center gap-3 p-4 rounded-lg"> */
 }
