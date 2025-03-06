@@ -4,10 +4,11 @@ import { prisma } from "@/lib/prisma";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession();
+    const id = (await params).id;
     if (!session?.user) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -28,7 +29,7 @@ export async function PATCH(
     }
 
     const submission = await prisma.submission.findUnique({
-      where: { id: params.id },
+      where: { id: id },
     });
 
     if (!submission) {
@@ -61,7 +62,7 @@ export async function PATCH(
     }
 
     const updatedSubmission = await prisma.submission.update({
-      where: { id: params.id },
+      where: { id: id },
       data: { status },
     });
 
