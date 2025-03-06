@@ -66,7 +66,7 @@ export default function AdminDashboard({
                   className="flex items-center justify-between py-3 border-b border-white/10 last:border-0">
                   <div>
                     <h3 className="font-medium">{app.name}</h3>
-                    <p className="text-sm text-gray-400">{app.category}</p>
+                    <p className="text-sm text-gray-400">{app._count.votes}</p>
                   </div>
                   <span className="text-sm text-gray-400">
                     {new Date(app.createdAt).toLocaleDateString()}
@@ -101,6 +101,11 @@ export default function AdminDashboard({
 
         {/* Quick Actions */}
         <div className="mt-8 flex gap-4">
+          <Link
+            href="/admin/submissions"
+            className="px-4 py-2 bg-gradient-to-br from-blue/40 via-blue/20 to-green/60 text-white rounded-lg transition-colors">
+            Manage Submissions
+          </Link>
           <Link
             href="/admin/aiApps"
             className="px-4 py-2 bg-green/20 text-green rounded-lg hover:bg-green/30 transition-colors">

@@ -8,6 +8,7 @@ const navItems = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/aiApps", label: "Manage Apps" },
   { href: "/admin/aiModels", label: "Manage Models" },
+  { href: "/admin/submissions", label: "Manage Submissions" },
 ];
 
 export default function AdminNavbar() {
