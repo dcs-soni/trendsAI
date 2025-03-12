@@ -8,6 +8,7 @@ import { signIn, useSession } from "next-auth/react";
 
 import InputElement from "@/components/InputElement";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 export default function SignIn() {
   const router = useRouter();
@@ -37,13 +38,15 @@ export default function SignIn() {
       });
 
       if (result?.error) {
-        alert(result.error);
+        toast.error(result.error)
       } else {
+        toast.success("Signin successful")
         router.push("/dashboard");
       }
     } catch (error) {
       console.error("Sign in error:", error);
-      alert("Failed to sign in. Please try again.");
+     
+      toast.error("Failed to sign in. Please try again.")
     }
   };
 
@@ -54,7 +57,8 @@ export default function SignIn() {
       });
     } catch (error) {
       console.error(`${provider} sign in error:`, error);
-      alert(`Failed to sign in with ${provider}. Please try again.`);
+  
+      toast.error(`Failed to sign in with ${provider}. Please try again.`)
     }
   };
 

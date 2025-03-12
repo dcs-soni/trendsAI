@@ -4,6 +4,7 @@ import InputElement from "@/components/InputElement";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AIImage } from "@/app/constants/constants";
+import { toast } from "sonner";
 
 interface AddModalProps {
   category: "App" | "Model";
@@ -58,7 +59,8 @@ export default function AddModal({ category, setShowAddModal }: AddModalProps) {
       router.refresh();
     } catch (error) {
       console.error("Error adding item:", error);
-      alert(error instanceof Error ? error.message : "Failed to add item");
+
+      toast.error(error instanceof Error ? error.message : "Failed to add item")
     } finally {
       setIsLoading(false);
     }

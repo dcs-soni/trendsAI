@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import React from "react";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 interface CardContentProps {
   aiApps?: AIApp[];
@@ -58,7 +59,8 @@ const CardContent = ({
     }
 
     if (!sessionData?.user?.id) {
-      alert("Please sign in to like items");
+    
+      toast.error("Please sign in to like items")
       return;
     }
 
@@ -93,9 +95,10 @@ const CardContent = ({
       }
     } catch (error) {
       console.error("Error toggling like:", error);
-      alert(
-        error instanceof Error ? error.message : "Failed to update like status"
-      );
+
+        
+        toast.error(error instanceof Error ? error.message : "Failed to update like status")
+   
     } finally {
       setIsLoading((prev) => ({ ...prev, [itemId]: false }));
     }

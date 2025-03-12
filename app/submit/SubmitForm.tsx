@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import InputElement from "@/components/InputElement";
 import { AIImage } from "@/app/constants/constants";
+import { toast } from "sonner";
 
 export default function SubmitForm() {
   const router = useRouter();
@@ -50,7 +51,7 @@ export default function SubmitForm() {
         throw new Error("Failed to submit");
       }
 
-      alert("Submitted");
+      toast.success("Your AI tool has been submitted. Please wait till it gets approved.")
 
       router.push("/dashboard?status=submitted");
     } catch (error) {

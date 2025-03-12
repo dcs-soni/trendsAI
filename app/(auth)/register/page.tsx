@@ -6,6 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
+import { toast } from "sonner"
+
 
 export default function Register() {
   const router = useRouter();
@@ -43,26 +45,16 @@ export default function Register() {
       });
 
       if (res.ok) {
-        // After successful registration, sign in the user
-        const signInResult = await signIn("credentials", {
-          email: emailRef.current?.value,
-          password: passwordRef.current?.value,
-          redirect: false,
-        });
-
-        if (signInResult?.ok) {
-          router.push("/dashboard");
-        } else {
-          alert("Registration successful. Please sign in.");
-          router.push("/signin");
-        }
+ 
+        toast.success("Registeration successful. Please sign in.")
+        router.push("/signin");
       } else {
-        const data = await res.json();
-        alert(data.error);
-      }
+           toast.error("Failed to register. Please try again.")
+        }
+      
     } catch (error) {
       console.error("Registration error:", error);
-      alert("Failed to register. Please try again.");
+      toast.error("Try to register again")
     }
   };
 
@@ -73,7 +65,8 @@ export default function Register() {
       });
     } catch (error) {
       console.error(`${provider} sign up error:`, error);
-      alert(`Failed to sign up with ${provider}. Please try again.`);
+    
+      toast.error(`Failed to sign up with ${provider}. Please try again.`)
     }
   };
 
