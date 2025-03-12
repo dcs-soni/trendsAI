@@ -1,6 +1,6 @@
 # trendsAI 🌟
 
-<img src="https://raw.githubusercontent.com/dcs-soni/trendsAI/refs/heads/main/public/logo.png?token=GHSAT0AAAAAAC5EEBE6GW32HEEQX2QZSXXSZ6RRXMQ" alt="trendsAI Logo" width="400">
+<img src="https://raw.githubusercontent.com/dcs-soni/trendsAI/refs/heads/main/public/logo.png?token=GHSAT0AAAAAAC5EEBE6GW32HEEQX2QZSXXSZ6RRXMQ" alt="trendsAI Logo" width="100%">
 
 
 ## Introduction
