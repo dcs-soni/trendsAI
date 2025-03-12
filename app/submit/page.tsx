@@ -10,10 +10,10 @@ export default async function SubmitPage() {
   }
 
   return (
-    <div className="container w-full py-6 lg:py-10">
+    <div className="container bg-black w-full py-6 lg:py-10">
       <div className="flex flex-col gap-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold md:text-4xl">
+          <h1 className="text-3xl text-white font-bold md:text-4xl">
             Submit Your AI Tool
           </h1>
           <p className="mt-3 text-lg text-muted-foreground">

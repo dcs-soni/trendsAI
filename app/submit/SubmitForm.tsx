@@ -62,8 +62,9 @@ export default function SubmitForm() {
   };
 
   return (
-    <div className="bg-white/5 rounded-2xl p-8 backdrop-blur-sm border border-white/10 w-full max-w-2xl mx-auto">
+    <div className="bg-black rounded-2xl p-8 backdrop-blur-sm border border-white/10 w-full max-w-2xl mx-auto">
       <form onSubmit={handleSubmit} className="space-y-6">
+    
         <div className="flex gap-4 mb-8">
           <button
             type="button"
