@@ -1,6 +1,6 @@
 # trendsAI 🌟
 
-![trendsAI Logo]([https://example.com/logo.png](https://raw.githubusercontent.com/dcs-soni/trendsAI/refs/heads/main/public/logo.png?token=GHSAT0AAAAAAC5EEBE6GW32HEEQX2QZSXXSZ6RRXMQ))
+![trendsAI Logo](https://raw.githubusercontent.com/dcs-soni/trendsAI/refs/heads/main/public/logo.png?token=GHSAT0AAAAAAC5EEBE6GW32HEEQX2QZSXXSZ6RRXMQ)
 
 ## Introduction
 
