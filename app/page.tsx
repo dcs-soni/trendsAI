@@ -7,6 +7,7 @@ import FeatureThreeSVG from "@/components/icons/FeatureThreeSVG";
 import { motion } from "motion/react";
 import ImageCarousel from "@/components/ImageCarousel";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LandingPage() {
   return (
@@ -117,8 +118,8 @@ export default function LandingPage() {
                   technology.
                 </p>
               </div>
-              <div className="flex-1 relative h-96 w-full bg-gradient-to-br from-green/20 to-blue/10 rounded-2xl overflow-hidden">
-                {/* App showcase/demo content here */}
+              <div className="flex-1 flex items-center justify-center  relative h-96 w-full bg-gradient-to-br from-green/20 to-blue/10 rounded-2xl overflow-hidden">
+                <Image alt="Images of AI Apps dashboard" className="object-contain rounded-2xl" width={550} height={550} src="/aiapps.png" /> 
               </div>
             </motion.div>
 
@@ -139,8 +140,8 @@ export default function LandingPage() {
                   model analysis.
                 </p>
               </div>
-              <div className="flex-1 relative h-96 w-full bg-gradient-to-br from-blue/30 to-green/10 rounded-2xl overflow-hidden">
-                {/* Model showcase/demo content here */}
+              <div className="flex-1 flex items-center justify-center  relative h-96 w-full bg-gradient-to-br from-green/20 to-blue/10 rounded-2xl overflow-hidden">
+                <Image alt="Images of AI Models dashboard" className="object-contain rounded-2xl" width={550} height={550} src="/aimodels.png" /> 
               </div>
             </motion.div>
 
@@ -160,8 +161,8 @@ export default function LandingPage() {
                   enthusiasts. Be part of a growing community of innovators.
                 </p>
               </div>
-              <div className="flex-1 relative h-96 w-full bg-gradient-to-br from-green/20 to-blue/30 rounded-2xl overflow-hidden">
-                {/* Community showcase/demo content here */}
+              <div className="flex-1 flex items-center justify-center  relative h-96 w-full bg-gradient-to-br from-green/20 to-blue/10 rounded-2xl overflow-hidden">
+                <Image alt="Coming soon image" className="object-contain rounded-2xl" width={350} height={350} src="/comingsoon.png" /> 
               </div>
             </motion.div>
           </div>
@@ -184,7 +185,7 @@ export default function LandingPage() {
             </h2>
 
             <ButtonLinks
-              href="/auth/register"
+              href="/register"
               className="inline-block px-8 py-4 text-lg font-medium bg-white text-black rounded-full hover:bg-gray-100 transition-colors duration-200">
               Get Started now
             </ButtonLinks>
