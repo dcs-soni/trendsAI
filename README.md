@@ -1,6 +1,7 @@
 # trendsAI 🌟
 
-![trendsAI Logo](https://example.com/logo.png)
+<img src="https://raw.githubusercontent.com/dcs-soni/trendsAI/refs/heads/main/public/logo.png?token=GHSAT0AAAAAAC5EEBE6GW32HEEQX2QZSXXSZ6RRXMQ" alt="trendsAI Logo" width="100%">
+
 
 ## Introduction
 
@@ -15,7 +16,6 @@ Welcome to **trendsAI**, a web application designed to serve as a comprehensive 
 - [Usage](#usage)
 - [Code Explanation](#code-explanation)
 - [Contributing](#contributing)
-- [License](#license)
 - [Acknowledgments](#acknowledgments)
 
 ## Features 🚀
