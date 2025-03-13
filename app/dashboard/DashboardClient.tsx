@@ -8,6 +8,13 @@ import { useState } from "react";
 import { AIApp, AIModel } from "./page";
 import { motion } from "framer-motion";
 
+// Add pagination utilities
+const ITEMS_PER_PAGE = 20;
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
 // Ts infers id properties as string without "as const" but these strings are literal types
 const tabs = [
   { id: "apps" as const, label: "AI Apps" },
@@ -26,6 +33,30 @@ export default function DashboardClient({
   session,
 }: DashboardClientProps) {
   const [activeTab, setActiveTab] = useState<"apps" | "models">("apps");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Get current items based on pagination
+  const getCurrentItems = () => {
+    const items = activeTab === "apps" ? aiApps : aiModels;
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  };
+
+  // Calculate total pages
+  const totalItems = activeTab === "apps" ? aiApps.length : aiModels.length;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    scrollToTop();
+  };
+
+  // Reset page when tab changes
+  const handleTabChange = (tab: "apps" | "models") => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -80,7 +111,7 @@ export default function DashboardClient({
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => handleTabChange(tab.id)}
               className={`relative flex-1 py-2 px-4 text-sm font-medium rounded-lg transition-colors
               ${
                 activeTab === tab.id
@@ -104,8 +135,8 @@ export default function DashboardClient({
           {session ? (
             <AICards
               activeTab={activeTab}
-              aiApps={aiApps}
-              aiModels={aiModels}
+              aiApps={getCurrentItems()}
+              aiModels={getCurrentItems()}
             />
           ) : (
             <>
@@ -128,6 +159,41 @@ export default function DashboardClient({
             </>
           )}
         </div>
+
+        {/* Pagination Controls */}
+        {session && totalPages > 1 && (
+          <div className="mt-8 flex justify-center items-center gap-2">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-3 py-1 text-sm bg-white/5 text-white rounded-lg hover:bg-white/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+            
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                className={`px-3 py-1 text-sm rounded-lg transition-colors ${
+                  currentPage === page
+                    ? "bg-white/20 text-white"
+                    : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1 text-sm bg-white/5 text-white rounded-lg hover:bg-white/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
